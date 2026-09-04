@@ -1,0 +1,17 @@
+# From Meta App Dashboard > Messenger > Settings > Access Tokens
+PAGE_ACCESS_TOKEN=your_page_access_token_here
+
+# Any secret string you choose yourself; must match what you enter
+# in the Meta App Dashboard webhook setup
+VERIFY_TOKEN=dev-verify-token
+
+# Port for local server (Render sets this automatically in production)
+PORT=3000
+
+# OPTIONAL — only used for natural-sounding small talk/greetings.
+# Leave blank and the bot still works fully rule-based.
+# Free key at console.groq.com/keys
+GROQ_API_KEY=
+
+# Optional — defaults to llama-3.1-8b-instant (Groq free-tier model)
+GROQ_MODEL=llama-3.1-8b-instant

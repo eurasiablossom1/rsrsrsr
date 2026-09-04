@@ -1,0 +1,148 @@
+property_id,title,property_type,city,subdivision,price,lot_area,floor_area,bedrooms,bathrooms,turnover_status,financing,status
+PROP-001,Luxury 5BR House with Pool in The Orchard,House & Lot,Dasmariñas,The Orchard Golf & Country Club,40000000.0,500.0,638.82,5.0,6.0,RFO,Bank / Cash,Available
+PROP-002,6BR Two-Storey House in Aster Road,House & Lot,Dasmariñas,The Orchard Golf & Country Club,30000000.0,300.0,432.05,6.0,6.0,RFO,Bank / Cash,Available
+PROP-003,5BR Two-Storey House in Mulberry St.,House & Lot,Dasmariñas,Green Meadows Phase 2 at The Orchard,20000000.0,204.0,292.19,5.0,4.0,RFO,Bank / Cash,Available
+PROP-004,4BR Duplex House in Sorrento St. (Unit A),House & Lot,Bacoor,Town & Country West,11400000.0,107.0,181.43,4.0,3.0,RFO,Bank / Cash,Available
+PROP-005,4BR Duplex House in Sorrento St. (Unit B),House & Lot,Bacoor,Town & Country West,11250000.0,106.0,176.28,4.0,3.0,RFO,Bank / Cash,Available
+PROP-006,Karen Model 4BR Duplex in Zaragoza St.,House & Lot,Bacoor,Town & Country West,7950000.0,75.0,115.0,4.0,3.0,NRFO,Cash / Bank / In-House,Available
+PROP-007,RFO Inner Unit Townhouse in Airmen's Village,House & Lot,Las Piñas,Jumbo St. Airmen's Village,8973074.58,81.37,140.4,3.0,2.0,RFO,Bank,Available
+PROP-008,Bella Model 5BR Single Attached,House & Lot,Dasmariñas,San Lorenzo Heights Subd.,12500000.0,150.0,179.12,5.0,4.0,NRFO,Bank / In-House,Available
+PROP-009,Leonore Model 3BR Single Attached,House & Lot,Muntinlupa,South Greenheights Village,8500000.0,179.0,130.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-010,4BR Two-Storey Duplex in Town & Country West,House & Lot,Bacoor,Town & Country West,8200000.0,75.0,119.7,4.0,2.0,RFO,Bank / Cash,Available
+PROP-011,Fully Furnished 4BR Smart House in Vista Verde,House & Lot,Bacoor,Vista Verde,19000000.0,176.0,220.0,4.0,3.0,RFO,Cash / Bank,Available
+PROP-012,Modern 4BR House in Meadowood Executive Village,House & Lot,Bacoor,Meadowood Executive Village,11500000.0,-,-,4.0,3.0,RFO,Bank / Cash,Available
+PROP-013,Periwinkle Townhouse 4BR Unit,House & Lot,Las Piñas,Talon V,-,-,140.0,4.0,3.0,RFO,Bank / Cash,Available
+PROP-014,3BR Townhouse Corner Unit (Blk 4 Lot 44),House & Lot,Bacoor,Kathleen Place 5,9394046.71,90.0,118.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-015,3BR Townhouse Corner Unit (Blk 4 Lot 23),House & Lot,Bacoor,Kathleen Place 5,10432838.34,112.0,114.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-016,3BR Townhouse End Unit,House & Lot,Bacoor,Kathleen Place 5,8814448.12,90.0,118.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-017,3BR Townhouse Inner Unit,House & Lot,Bacoor,Kathleen Place 5,6205398.53,60.0,106.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-018,3BR Townhouse Corner Unit (Blk 3 Lot 1),House & Lot,Bacoor,Kathleen Place 5,12652075.02,159.0,118.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-019,3BR Townhouse Corner Unit (Blk 4 Lot 22),House & Lot,Bacoor,Kathleen Place 5,11613283.38,137.0,118.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-020,3BR Townhouse Corner Unit (Blk 3 Lot 48),House & Lot,Bacoor,Kathleen Place 5,11141105.37,127.0,118.0,3.0,2.0,RFO,Bank / Cash,Available
+PROP-021,Spring Build 4BR Single Detached,House & Lot,Bacoor,"Spring Build, Brgy. San Miguel 1, Molino IV",-,207.0,95.2,4.0,3.0,NRFO,Bank / Cash,Available
+PROP-022,Town and Country West 4BR Duplex Unit,House & Lot,Bacoor,Town & Country West,8200000.0,75.0,119.7,4.0,3.0,RFO,Bank / Cash,Available
+PROP-023,Town and Country West Residential Lot,Vacant Lot,Bacoor,Town & Country West,5450000.0,280.0,-,-,-,RFO,Cash,Sold
+PROP-024,Meadowood Executive Village Brand New Duplex,House & Lot,Bacoor,Meadowood Executive Village,8200000.0,75.0,157.0,4.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-025,Leonore Model 4BR House and Lot,House & Lot,Muntinlupa,South Greenheights Village (Reignwood),10495000.0,180.0,100.0,4.0,3.0,RFO,Bank / In-House,Available
+PROP-026,Karen Model 4BR Duplex (Reignwood),House & Lot,Las Piñas,Reignwood Residences,7950000.0,75.0,115.0,4.0,3.0,RFO,Bank / In-House,Available
+PROP-027,Gelma Model 2BR Bungalow,House & Lot,Las Piñas,Benedetto Residences,4495000.0,80.0,84.0,2.0,2.0,RFO,Bank / In-House,Available
+PROP-028,Amore Classico 4BR Single Attached,House & Lot,Las Piñas,Benedetto Residences,7995000.0,52.0,102.0,4.0,3.0,RFO,Bank / In-House,Available
+PROP-029,Keziah Model 3BR House and Lot,House & Lot,Las Piñas,Benedetto Residences,5790000.0,60.0,89.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-030,Amore Grande 4BR Single Attached,House & Lot,Las Piñas,Benedetto Residences,11900000.0,102.0,137.0,4.0,3.0,RFO,Bank / In-House,Available
+PROP-031,Rialzo Model 4BR House and Lot,House & Lot,Las Piñas,Benedetto Residences,,158.0,133.0,4.0,2.0,RFO,Bank / In-House,Sold
+PROP-032,Arya Model 4BR Farmhouse Style,House & Lot,Las Piñas,Benedetto Residences,,150.0,124.0,4.0,3.0,RFO,Bank / In-House,Sold
+PROP-033,Terazza Model 4BR House and Lot,House & Lot,Las Piñas,Benedetto Residences,,81.0,93.0,4.0,3.0,RFO,Bank / In-House,Sold
+PROP-034,Eleonor Model 4BR House and Lot,House & Lot,Muntinlupa,South Greenheights Village (Reignwood),,100.0,140.0,4.0,3.0,RFO,Bank / In-House,Sold
+PROP-035,Montana Model 3BR House and Lot,House & Lot,Bacoor,Reignwood Residences,,78.0,108.0,3.0,2.0,RFO,Bank / In-House,Sold
+PROP-036,Yosara Model 3BR House and Lot,House & Lot,Bacoor,Reignwood Residences,,80.0,86.6,3.0,2.0,RFO,Bank / In-House,Sold
+PROP-037,3BR Townhouse End Unit (SPS-TH-25-20),House & Lot,Bacoor,Kathleen Place 5,8516375.0,90.0,118.0,3.0,2.0,RFO,Bank,Available
+PROP-038,3BR Townhouse Inner Unit (SPS-TH-25-19),House & Lot,Bacoor,Kathleen Place 5,5995554.0,90.0,118.0,3.0,2.0,RFO,Bank,Available
+PROP-039,Residential Lot (SB-RL-25-14),Vacant Lot,Bacoor,Kathleen Place 5,6670580.0,217.0,,,,RFO,Cash,Available
+PROP-040,"2-Storey Townhouse Unit, Kathleen Place 4",House & Lot,Quezon City,Kathleen Place 4,4200000.0,60.0,90.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-041,"Single Attached Unit, Kathleen Place 4",House & Lot,Quezon City,Kathleen Place 4,5800000.0,75.0,105.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-042,"Kathleen Townhouse Unit, Millbrae Estate",House & Lot,Parañaque,Millbrae Estate Subdivision,5400000.0,65.0,95.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-043,"Kathleen Single Attached Unit, Millbrae Estate",House & Lot,Parañaque,Millbrae Estate Subdivision,6600000.0,80.0,110.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-044,"Single Attached House, Patricia Executive Village",House & Lot,Bacoor,Patricia Executive Village,4900000.0,72.0,88.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-045,"3-Storey Residential Unit, Kathleen Place 3",House & Lot,Quezon City,"Kathleen Place 3 (Ermin Garcia St., Cubao)",7800000.0,55.0,130.0,3.0,3.0,RFO,Bank / In-House,Available
+PROP-046,"Townhouse Unit, Jeanette Gardens 2",House & Lot,Las Piñas,Jeanette Gardens 2,5200000.0,60.0,92.0,3.0,2.0,RFO,Bank / In-House,Available
+PROP-047,"4BR House and Lot, The Grand Parkplace Village",House & Lot,Imus,The Grand Parkplace Village,11800000.0,150.0,200.58,4.0,3.0,RFO,Bank / Cash,Available
+PROP-048,"5BR Luxury House w/ Pool, Grand Parkplace Village",House & Lot,Imus,The Grand Parkplace Village,34000000.0,556.0,550.0,5.0,5.0,RFO,Bank / Cash,Available
+PROP-049,Chestnut Model 2-Storey House and Lot,House & Lot,Imus,The Grand Parkplace Village,11200000.0,150.0,219.55,4.0,3.0,RFO,Bank / Cash,Available
+PROP-050,Chestnut Model House and Lot (Alt. Layout),House & Lot,Imus,The Grand Parkplace Village,14000000.0,198.0,196.0,5.0,4.0,RFO,Bank / Cash,Available
+PROP-051,"Single Attached House, Grand Parkplace Village",House & Lot,Imus,The Grand Parkplace Village,9120000.0,150.0,197.0,4.0,3.0,NRFO,Bank / Cash,Available
+PROP-052,"5BR House and Lot with Garage, Parkplace Village",House & Lot,Imus,The Parkplace Village,22000000.0,432.0,550.0,5.0,5.0,RFO,Bank / Cash,Available
+PROP-053,"3BR House and Lot, Parkplace Village",House & Lot,Imus,The Parkplace Village,8500000.0,150.0,197.5,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-054,"4BR House and Lot, Pacific Parkplace Village",House & Lot,Dasmariñas,Pacific Parkplace Village,10500000.0,150.0,180.0,4.0,3.0,RFO,Bank / Cash,Available
+PROP-055,"RFO Unit, Grand Parkplace Village (Sold)",House & Lot,Imus,The Grand Parkplace Village,10200000.0,146.0,190.0,4.0,3.0,RFO,Bank / Cash,Sold
+PROP-056,"Residential Lot, Grand Parkplace Village",Vacant Lot,Imus,The Grand Parkplace Village,4500000.0,150.0,,,,RFO,Cash,Available
+PROP-057,"Bella House Model, 2-Storey Single Attached",House & Lot,Silang,Camella Silang,4094500.0,100.0,52.0,2.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-058,"Greta House Model, Single Attached",House & Lot,Silang,Camella Silang,8504000.0,200.0,166.0,5.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-059,"Freya House Model, Single Attached",House & Lot,General Trias,Camella General Trias,10128800.0,130.0,142.0,5.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-060,"Carson House Model, Single Attached",House & Lot,Bacoor,Camella Carson Daang Hari,13632300.0,121.0,110.0,5.0,3.0,RFO,Bank / Pag-IBIG / Cash,Available
+PROP-061,"Carson House Model, Bigger Lot",House & Lot,Bacoor,Camella Carson Daang Hari,23416650.0,243.0,166.0,5.0,3.0,RFO,Bank / Pag-IBIG / Cash,Available
+PROP-062,"Cerritos House Model, Single Attached",House & Lot,Bacoor,Camella Cerritos Bacoor,5450000.0,156.0,53.0,2.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-063,"Praverde House Model, Single Attached (5BR)",House & Lot,Dasmariñas,Camella Praverde,11145000.0,171.0,166.0,5.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-064,"Praverde House Model, Single Attached (4BR)",House & Lot,Dasmariñas,Camella Praverde,9200000.0,121.0,83.0,4.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-065,L-Series House Model,House & Lot,Cavite City,Camella Cavite (Hill Series),2000000.0,60.0,40.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-066,"Bucandala House Model, Starter Unit",House & Lot,Imus,Camella Bucandala,1500000.0,60.0,35.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-067,"Naic House Model, 2-Storey Unit",House & Lot,Naic,Camella Naic,2000000.0,90.0,55.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-068,"Alta Silang House Model, 2-Storey Unit",House & Lot,Silang,Camella Alta Silang,3000000.0,90.0,60.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-069,Aimee 1BR Row House (Inner Unit),House & Lot,Lipa,Lumina Lipa City,497000.0,36.0,22.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-070,Angelique 2BR Townhouse (Inner Unit),House & Lot,Lipa,Lumina Lipa City,813000.0,36.0,35.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-071,Angelique 2BR Townhouse (End Unit),House & Lot,Lipa,Lumina Lipa City,973000.0,54.0,35.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-072,Angeli 3BR Townhouse (End Unit),House & Lot,Bauan,Lumina Bauan,1067974.0,54.0,42.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-073,"Aimee 1BR Row House, Bauan",House & Lot,Bauan,Lumina Bauan,503000.0,36.0,22.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-074,"Angelique 2BR Townhouse, Bauan",House & Lot,Bauan,Lumina Bauan,785000.0,36.0,35.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-075,Aira 2BR Bungalow,House & Lot,Tanza,Lumina Tanza,1200000.0,54.0,33.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-076,"Angeli 3BR Townhouse, Bacolod",House & Lot,Pandi,Lumina Pandi,2045000.0,54.0,42.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-077,Airene 1BR Single-Storey Unit,House & Lot,Plaridel,Lumina Plaridel,550000.0,36.0,22.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-078,Arianne 2BR Bungalow,House & Lot,Baliuag,Lumina Baliuag,900000.0,40.0,26.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-079,Thalia 3BR Single Firewall,House & Lot,San Pedro,Bria Homes Alaminos,2635000.0,81.0,45.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-080,Alecza 2BR Townhouse,House & Lot,San Pedro,Bria Homes Alaminos,2200000.0,81.0,36.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-081,Bettina End Unit Townhouse,House & Lot,Calamba,Bria Homes Executive Calamba,1950000.0,54.0,44.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-082,Bettina Inner Unit Townhouse,House & Lot,Calamba,Bria Homes Executive Calamba,1650000.0,36.0,44.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-083,"Thalia 3BR Single Firewall, General Trias",House & Lot,General Trias,Bria Homes General Trias,2500000.0,81.0,36.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-084,"Bettina Townhouse, Trece Martires",House & Lot,Trece Martires,Bria Homes Trece Martires,1750000.0,36.0,44.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-085,Maria 3BR Townhouse,House & Lot,Santa Maria,Bria Homes Sta. Maria,1450000.0,63.0,42.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-086,"Alecza 2BR Townhouse, Norzagaray",House & Lot,Norzagaray,Bria Homes Norzagaray,2050000.0,81.0,45.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-087,Elyana Single-Storey Model,House & Lot,San Jose del Monte,Bria Homes San Jose del Monte,1350000.0,54.0,44.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-088,"Thalia 3BR Model, Lipa",House & Lot,Lipa,Bria Homes Lipa,2635000.0,81.0,45.0,3.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-089,"Alecza 2BR Model, Balayan",House & Lot,Balayan,Bria Homes Balayan,2200000.0,81.0,36.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-090,"Bettina Townhouse, Binangonan",House & Lot,Binangonan,Bria Homes Binangonan,1900000.0,54.0,42.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-091,Stefano 3BR Two-Storey Model,House & Lot,Bacoor,Vivace by Crown Asia,33180000.0,300.0,323.0,3.0,3.0,NRFO,Bank / In-House,Available
+PROP-092,3BR House with Solar Roof Panels,House & Lot,San Pedro,La Marea by Crown Asia,11000000.0,150.0,155.0,3.0,3.0,RFO,Bank / Cash,Available
+PROP-093,"Neuville Townhome, 3BR Corner Unit",House & Lot,Tanza,Ponticelli Neuville by Crown Asia,4500000.0,52.0,55.6,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-094,Designer 65 Single Firewall Model,House & Lot,Dasmariñas,"Levanzo at The Island Park, Crown Asia",7500000.0,65.0,85.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-095,"Alessia Model, 2-Storey House and Lot",House & Lot,Bacoor,Citta Italia by Crown Asia,5355000.0,85.0,102.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-096,Emerald Model House and Lot,House & Lot,Santa Rosa,Valenza by Crown Asia,12000000.0,192.0,146.0,3.0,3.0,RFO,Bank / Cash,Available
+PROP-097,Fortezza 3BR House and Lot,House & Lot,Cabuyao,Fortezza by Crown Asia,8900000.0,120.0,109.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-098,Sapphire Model House and Lot,House & Lot,Bacoor,Ponticelli by Crown Asia,6800000.0,96.0,84.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-099,Lladro Model House and Lot,House & Lot,Bacoor,Vita Toscana by Crown Asia,7200000.0,88.0,65.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-100,Vivace 3BR Lot Only / RFO Cara Model,House & Lot,Imus,Vivace by Crown Asia,5376000.0,96.0,,,,NRFO,Bank / In-House,Available
+PROP-101,"2BR Single Attached House, Avida Settings Nuvali",House & Lot,Calamba,Avida Settings Nuvali,9500000.0,135.0,116.0,2.0,2.0,RFO,Bank / Cash,Available
+PROP-102,"2BR House, Avida Parkway Settings",House & Lot,Santa Rosa,Avida Parkway Settings,6800000.0,126.0,60.0,2.0,1.0,RFO,Bank / Cash,Available
+PROP-103,"3BR House, Avida Parklane Settings Vermosa",House & Lot,Imus,"Avida Parklane Settings, Vermosa",8977000.0,100.0,90.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-104,"4BR House, Avida Parklane Settings Vermosa",House & Lot,Imus,"Avida Parklane Settings, Vermosa",11439000.0,120.0,116.0,4.0,3.0,NRFO,Bank / Cash,Available
+PROP-105,Padova Model House and Lot,House & Lot,Dasmariñas,Avida Residences Santa Catalina,5900000.0,90.0,84.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-106,Sienna Model House and Lot,House & Lot,Dasmariñas,Avida Residences Santa Catalina,6500000.0,100.0,95.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-107,Ravenna Model House and Lot,House & Lot,Dasmariñas,Avida Village Santa Cecilia,4900000.0,80.0,70.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-108,Genoa Model House and Lot,House & Lot,Dasmariñas,Avida Village Santa Cecilia,5300000.0,85.0,75.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-109,Amaia Series Bungalow Unit,House & Lot,Imus,Amaia Series Vermosa,4200000.0,60.0,42.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-110,Amaia Series 2-Storey Duplex,House & Lot,Imus,Amaia Series Vermosa,5500000.0,60.0,60.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-111,Amaia Steps Townhouse Unit,House & Lot,General Trias,Amaia Steps General Trias,3200000.0,44.0,38.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-112,Amaia Scapes Single Attached,House & Lot,Cabuyao,Amaia Scapes Cabuyao,3900000.0,50.0,45.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-113,BellaVita 2BR Row House,House & Lot,Tagaytay,BellaVita Tagaytay,1200000.0,36.0,24.0,2.0,1.0,NRFO,Bank / Pag-IBIG / In-House,Available
+PROP-114,Serin Terraces 3BR Unit,House & Lot,Tagaytay,Serin Terraces Tagaytay,8800000.0,100.0,110.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-115,"Futura by Filinvest, 2BR Townhouse",House & Lot,Tanza,"Futura by Filinvest, Tanza",3643800.0,40.0,39.0,2.0,1.0,NRFO,Bank / Pag-IBIG / In-House,Available
+PROP-116,"Westwind at Lancaster New City, Studio Unit",Townhouse,Imus,Westwind at Lancaster New City,2800000.0,,24.0,1.0,1.0,Pre-Selling,Bank / In-House,Available
+PROP-117,Aldea Real 3BR House and Lot,House & Lot,Calamba,Aldea Real by Filinvest,4500000.0,100.0,84.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-118,Amare Homes 3BR House and Lot,House & Lot,Tanauan,Amare Homes by Filinvest,3200000.0,66.0,55.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-119,Alta Vida Walnut Model,House & Lot,San Rafael,Alta Vida by Filinvest,3900000.0,90.0,70.0,3.0,2.0,NRFO,Bank / In-House,Available
+PROP-120,Ashton Fields 2BR Unit,House & Lot,Calamba,Ashton Fields by Filinvest,3500000.0,64.0,50.0,2.0,1.0,NRFO,Bank / In-House,Available
+PROP-121,The Glens 2BR House and Lot,House & Lot,San Pedro,The Glens by Filinvest,4800000.0,72.0,60.0,2.0,2.0,NRFO,Bank / In-House,Available
+PROP-122,Arista 2BR House and Lot,House & Lot,Talisay,Arista by Filinvest,3300000.0,60.0,48.0,2.0,1.0,NRFO,Bank / In-House,Available
+PROP-123,"Filinvest Meridian Place, Townhouse Unit",Townhouse,General Trias,Filinvest Meridian Place,3900000.0,45.0,55.0,2.0,2.0,Pre-Selling,Bank / In-House,Available
+PROP-124,Aspire Cavite 4BR House and Lot,House & Lot,Silang,"Aspire by Filinvest, Cavite",15000000.0,180.0,160.0,4.0,3.0,NRFO,Bank / Cash,Available
+PROP-125,Ramona 3BR House and Lot,House & Lot,General Trias,Robinsons Homes Cavite,6500000.0,100.0,90.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-126,Adriana 4BR House and Lot,House & Lot,General Trias,Robinsons Homes Cavite,8900000.0,130.0,120.0,4.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-127,Camille 2BR Townhouse,House & Lot,Santo Tomas,Robinsons Homes Batangas,3800000.0,60.0,55.0,2.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-128,Bettina 3BR Single Attached,House & Lot,Sto. Tomas,Robinsons Homes Batangas,5200000.0,90.0,78.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-129,Angelina 4BR House and Lot,House & Lot,Trece Martires,Robinsons Homes Trece Martires,7300000.0,110.0,100.0,4.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-130,Kiara 3BR Single Attached,House & Lot,Trece Martires,Moldex Realty Trece Martires,5900000.0,90.0,85.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-131,Aurora 4BR House and Lot,House & Lot,General Trias,Moldex Realty General Trias,7800000.0,120.0,110.0,4.0,3.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-132,Camden 2BR Townhouse,House & Lot,Naic,Moldex Realty Naic,3200000.0,60.0,48.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-133,Sophia 3BR House and Lot,House & Lot,Trece Martires,Moldex Realty Trece Martires,6100000.0,96.0,88.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-134,Urban Deca Homes Studio Unit,Condominium,Cavite City,Urban Deca Homes Cavite,800000.0,,22.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-135,Urban Deca Homes 1BR Unit,Condominium,Imus,Urban Deca Homes Imus,1100000.0,,30.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-136,Deca Clark 2BR Row House,House & Lot,Mabalacat,"Deca Clark, Pampanga",1500000.0,40.0,36.0,2.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-137,Urban Deca Homes Manggahan Unit,Condominium,Pasig,Urban Deca Homes Manggahan,1300000.0,,34.0,1.0,1.0,NRFO,Pag-IBIG / In-House,Available
+PROP-138,Greenwoods Village House and Lot,House & Lot,Cainta,Greenwoods Executive Village,12000000.0,200.0,180.0,4.0,3.0,NRFO,Bank / Cash,Available
+PROP-139,Metrogate San Jose 3BR House,House & Lot,San Jose del Monte,Metrogate San Jose,3900000.0,72.0,60.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-140,Marikina Greenheights House and Lot,House & Lot,Marikina,Marikina Greenheights,8500000.0,120.0,100.0,3.0,2.0,NRFO,Bank / Cash,Available
+PROP-141,Metrogate Tanza 2BR Townhouse,House & Lot,Tanza,Metrogate Tanza,3200000.0,54.0,44.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-142,Suntrust Verona 3BR House and Lot,House & Lot,Santa Maria,Suntrust Verona,4500000.0,80.0,70.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-143,Suntrust Ecoglades 2BR Townhouse,House & Lot,Cabuyao,Suntrust Ecoglades,3600000.0,60.0,50.0,2.0,1.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-144,Suntrust Parkville 3BR House and Lot,House & Lot,General Trias,Suntrust Parkville,4900000.0,90.0,78.0,3.0,2.0,NRFO,Bank / Pag-IBIG / Cash,Available
+PROP-145,Empire East California Garden Square Studio,Condominium,Mandaluyong,California Garden Square,2200000.0,,22.0,1.0,1.0,Pre-Selling,Bank / In-House,Available
+PROP-146,Empire East Little Baguio Terraces 1BR,Condominium,San Juan,Little Baguio Terraces,3500000.0,,32.0,1.0,1.0,RFO,Bank / In-House,Available
+PROP-147,Empire East Highland City 2BR,Condominium,Mandaluyong,Highland City,4200000.0,,45.0,2.0,1.0,Pre-Selling,Bank / In-House,Available
