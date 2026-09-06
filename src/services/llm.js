@@ -13,13 +13,13 @@
  * an otherwise rule-based system, not a replacement for it.
  *
  * Uses Groq's free API (OpenAI-compatible chat completions endpoint).
- * Get a free key at console.groq.com/keys. Note: llama-3.1/3.3 models
- * became Enterprise-only on Groq — openai/gpt-oss-20b is the current
- * free-tier model used here.
+ * Get a free key at console.groq.com/keys. Free tier for
+ * openai/gpt-oss-20b: 30 req/min, 1,000 req/day, 8,000 tokens/min,
+ * 200,000 tokens/day (resets daily).
  *
- * If GROQ_API_KEY is not set, this silently returns null and the bot
- * falls back to the static varied phrasings in responses.js — the
- * chatbot works fully rule-based with zero LLM dependency either way.
+ * If GROQ_API_KEY is not set, or every attempt fails, this returns
+ * null and the bot falls back to the static varied phrasings in
+ * responses.js — the chatbot works fully rule-based either way.
  */
 
 const axios = require("axios");
@@ -32,47 +32,65 @@ const MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 // never state/imply real listing details — that's the thesis's core
 // "no hallucinated property data" claim. Everything else is loose on
 // purpose so replies don't sound scripted.
-const SYSTEM_PROMPT = `You're the casual, friendly voice of a Philippine real estate Facebook Page chatbot, chatting with a Filipino home buyer on Messenger. Reply naturally, like texting a friend — Taglish is welcome, keep it short (1-2 sentences), be warm and a little playful.
+const SYSTEM_PROMPT = `You're the casual, friendly voice of a Philippine real estate Facebook Page chatbot, chatting with a Filipino home buyer on Messenger. Reply naturally, like texting a friend — Taglish is welcome, keep it short (1-2 sentences), be warm and a little playful. Never use emojis — plain text only.
 
 The ONLY hard rule: never state, imply, or guess specific prices, availability, addresses, unit counts, or any other listing detail — a separate system handles real property matching from the actual database, and you must not invent or estimate any of that yourself. If the buyer's message includes a real preference (property type, budget, location, etc.), just acknowledge it briefly and let them know you'll pull up real matches — don't answer with any specifics yourself.
 
-Otherwise, respond however feels natural for the conversation.`;
+Otherwise, respond however feels natural for the conversation, and always finish your thought — never cut a sentence off.`;
+
+// Strips emoji as a safety net in case the model adds one anyway.
+function stripEmoji(text) {
+  return text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu, "").trim();
+}
+
+async function callGroq(userMessage) {
+  const res = await axios.post(
+    GROQ_URL,
+    {
+      model: MODEL,
+      max_tokens: 200,
+      temperature: 1.0,
+      top_p: 0.95,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userMessage }
+      ]
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${GROQ_API_KEY}`,
+        "content-type": "application/json"
+      },
+      timeout: 15000
+    }
+  );
+
+  const text = res.data?.choices?.[0]?.message?.content?.trim();
+  return text ? stripEmoji(text) : null;
+}
 
 /**
  * Returns a short, natural small-talk reply, or null if the LLM is
- * unavailable/disabled/fails — callers must have a static fallback.
+ * unavailable/disabled/fails (after one retry) — callers must have a
+ * static fallback.
  */
 async function getSmallTalkReply(userMessage) {
   if (!GROQ_API_KEY) return null;
 
-  try {
-    const res = await axios.post(
-      GROQ_URL,
-      {
-        model: MODEL,
-        max_tokens: 100,
-        temperature: 1.05,
-        top_p: 0.95,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMessage }
-        ]
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
-          "content-type": "application/json"
-        },
-        timeout: 6000
-      }
-    );
-
-    const text = res.data?.choices?.[0]?.message?.content?.trim();
-    return text || null;
-  } catch (err) {
-    console.error("[llm] small-talk call failed:", err.response?.data || err.message);
-    return null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const reply = await callGroq(userMessage);
+      if (reply) return reply;
+    } catch (err) {
+      const isLastAttempt = attempt === 2;
+      console.error(
+        `[llm] small-talk call failed (attempt ${attempt}):`,
+        err.response?.data || err.message
+      );
+      if (isLastAttempt) return null;
+    }
   }
+  return null;
 }
 
 module.exports = { getSmallTalkReply };
