@@ -13,6 +13,7 @@ const { extractCriteria, filterAndRank } = require("../nlp/propertyFilter");
 const { getAllListings } = require("../data/listings");
 const { pick } = require("../data/responses");
 const { getSmallTalkReply } = require("../services/llm");
+const { createViewingEvent } = require("../services/googleCalendar");
 const {
   getAvailableDates,
   formatDateOptions,
@@ -172,6 +173,7 @@ function handleShowingResults(session, rawMessage, intent) {
     if (chosen) {
       session.viewing.propertyId = chosen.id;
       session.viewing.propertyLabel = chosen.title || chosen.id;
+      session.viewing.propertyLocation = chosen.location;
       session.state = "awaiting_date";
 
       const availableDates = getAvailableDates(6);
@@ -198,6 +200,7 @@ function handleAwaitingDate(session, rawMessage) {
   }
 
   session.viewing.date = chosen.label;
+  session.viewing.dateObj = chosen.date; // raw Date, needed for Google Calendar
   session.state = "awaiting_time";
   return `Got it — ${chosen.label}. What time works for you?\n${formatTimeOptions()}`;
 }
@@ -213,8 +216,19 @@ function handleAwaitingTime(session, rawMessage) {
   return "Perfect. Lastly, could you share a contact number so our agent can confirm the appointment?";
 }
 
-function handleAwaitingContact(session, rawMessage) {
+async function handleAwaitingContact(session, rawMessage) {
   session.viewing.contact = rawMessage.trim();
+
+  // Best-effort: push to Google Calendar if configured. Never blocks
+  // the confirmation — if it's not set up or fails, the viewing is
+  // still recorded in the chat + system log.
+  const calendarLink = await createViewingEvent({
+    propertyLabel: session.viewing.propertyLabel,
+    location: session.viewing.propertyLocation,
+    dateObj: session.viewing.dateObj,
+    timeLabel: session.viewing.time,
+    contact: session.viewing.contact
+  });
 
   const summary =
     `✅ Viewing request recorded!\n\n` +
@@ -222,9 +236,10 @@ function handleAwaitingContact(session, rawMessage) {
     `Date: ${session.viewing.date}\n` +
     `Time: ${session.viewing.time}\n` +
     `Contact: ${session.viewing.contact}\n\n` +
+    (calendarLink
+      ? `Added to the agent's calendar: ${calendarLink}\n\n`
+      : "") +
     `Our agent will reach out shortly to confirm. Thank you!`;
-
-  // NOTE: persist this to a DB here for agent follow-up in production.
 
   session.state = "idle";
   session.criteria = {};
