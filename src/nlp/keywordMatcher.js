@@ -80,7 +80,11 @@ function matchMessage(message) {
   const rank = { exact: 0, normalized: 1, fuzzy: 2 };
   const seen = new Set();
   return matches
-    .sort((a, b) => rank[a.matchType] - rank[b.matchType])
+    // Same matchType (e.g. two exact substring hits)? Prefer the more
+    // specific/longer phrase — e.g. "cancel my booking" should win
+    // over a shorter unrelated keyword like "book" that also happens
+    // to appear as a substring.
+    .sort((a, b) => (rank[a.matchType] - rank[b.matchType]) || (b.phrase.length - a.phrase.length))
     .filter((m) => {
       const key = `${m.intent}:${m.subtype || ""}`;
       if (seen.has(key)) return false;

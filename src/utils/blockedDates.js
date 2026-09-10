@@ -39,10 +39,15 @@ function isSlotBlocked(dateObj, timeLabel) {
   );
 }
 
-/** Marks a slot as taken by a confirmed buyer booking (not agent-togglable — stays taken). */
+/** Marks a slot as taken by a confirmed buyer booking. */
 function markBooked(dateKey, timeLabel) {
   if (!bookedSlots.has(dateKey)) bookedSlots.set(dateKey, new Set());
   bookedSlots.get(dateKey).add(timeLabel);
+}
+
+/** Cancels a confirmed booking, freeing the slot back up. */
+function unbook(dateKey, timeLabel) {
+  bookedSlots.get(dateKey)?.delete(timeLabel);
 }
 
 function getBookedSlotsForDate(dateKey) {
@@ -73,6 +78,7 @@ module.exports = {
   toggleSlot,
   getBlockedSlotsForDate,
   markBooked,
+  unbook,
   isBooked,
   getBookedSlotsForDate,
   blockedFullDays

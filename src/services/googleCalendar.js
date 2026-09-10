@@ -59,7 +59,7 @@ function combineDateAndTime(dateObj, timeLabel) {
 
 /**
  * Creates a viewing event on Google Calendar.
- * @returns {Promise<string|null>} the event's htmlLink, or null if
+ * @returns {Promise<{htmlLink: string, eventId: string}|null>} null if
  *   Calendar isn't configured or the call fails.
  */
 async function createViewingEvent({ propertyLabel, location, dateObj, timeLabel, contact }) {
@@ -83,11 +83,26 @@ async function createViewingEvent({ propertyLabel, location, dateObj, timeLabel,
       }
     });
 
-    return res.data.htmlLink || null;
+    if (!res.data.htmlLink || !res.data.id) return null;
+    return { htmlLink: res.data.htmlLink, eventId: res.data.id };
   } catch (err) {
     console.error("[googleCalendar] failed to create event:", err.response?.data || err.message);
     return null;
   }
 }
 
-module.exports = { createViewingEvent };
+/** Deletes a previously-created viewing event. Best-effort — never throws. */
+async function deleteViewingEvent(eventId) {
+  if (!CALENDAR_ID || !eventId) return;
+  const auth = getAuth();
+  if (!auth) return;
+
+  try {
+    const calendar = google.calendar({ version: "v3", auth });
+    await calendar.events.delete({ calendarId: CALENDAR_ID, eventId });
+  } catch (err) {
+    console.error("[googleCalendar] failed to delete event:", err.response?.data || err.message);
+  }
+}
+
+module.exports = { createViewingEvent, deleteViewingEvent };

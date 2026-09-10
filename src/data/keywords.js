@@ -59,7 +59,12 @@ module.exports = {
   ],
 
   restart: [
-    "restart", "reset", "start over", "simula", "ulit", "cancel viewing"
+    "restart", "reset", "start over", "simula", "ulit"
+  ],
+
+  cancel_booking: [
+    "cancel booking", "cancel my booking", "cancel my viewing",
+    "cancel appointment", "cancel my appointment", "kanselahin", "kansela"
   ],
 
   confirm: ["yes", "yep", "sure", "confirm", "okay", "ok", "oo", "sige", "opo"],

@@ -19,7 +19,8 @@ const {
   toggleFullDay,
   toggleSlot,
   getBlockedSlotsForDate,
-  isBooked
+  isBooked,
+  unbook
 } = require("../utils/blockedDates");
 const { ALL_TIME_SLOTS } = require("../utils/calendar");
 
@@ -61,9 +62,11 @@ function buildCell(dateObj, key, isCurrentMonth, isPast) {
     const shortLabel = t === "Morning" ? "AM" : "PM";
 
     if (booked) {
-      // Buyer already booked this slot — shown for visibility only,
-      // not click-toggleable (a real booking shouldn't be un-done here).
-      return `<span class="slotbtn booked" title="Booked by a buyer">${shortLabel}</span>`;
+      // Click to cancel the buyer's booking and free the slot back up.
+      // Note: this does NOT delete any matching Google Calendar event —
+      // remove that manually if you're using Calendar integration.
+      const cancelUrl = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&cancelBooking=${dateKey}|${encodeURIComponent(t)}`;
+      return `<a href="${cancelUrl}" class="slotbtn booked" title="Booked by a buyer — click to cancel">${shortLabel}</a>`;
     }
 
     const url = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleSlot=${dateKey}|${encodeURIComponent(t)}`;
@@ -134,7 +137,7 @@ function renderPage(key, year, month) {
       <h1>${MONTH_NAMES[month]} ${year}</h1>
       <a href="${nextUrl}">&rarr;</a>
     </div>
-    <p class="legend">Click a date number to block/unblock the whole day. Click AM/PM to block just that slot. Red = you blocked it. Blue = a buyer already booked it.</p>
+    <p class="legend">Click a date number to block/unblock the whole day. Click AM/PM to block/unblock a slot, or to cancel a buyer's booking (blue). Red = you blocked it.</p>
     <div class="grid">
       ${DAY_HEADERS.map((d) => `<div class="daylabel">${d}</div>`).join("")}
       ${cells.join("")}
@@ -158,6 +161,11 @@ router.get("/", (req, res) => {
   if (req.query.toggleSlot) {
     const [dateKey, timeLabel] = req.query.toggleSlot.split("|");
     toggleSlot(dateKey, decodeURIComponent(timeLabel));
+    return res.redirect(`/admin?key=${encodeURIComponent(key)}&month=${monthParam(year, month)}`);
+  }
+  if (req.query.cancelBooking) {
+    const [dateKey, timeLabel] = req.query.cancelBooking.split("|");
+    unbook(dateKey, decodeURIComponent(timeLabel));
     return res.redirect(`/admin?key=${encodeURIComponent(key)}&month=${monthParam(year, month)}`);
   }
 

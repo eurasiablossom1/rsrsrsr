@@ -13,7 +13,7 @@ const { extractCriteria, filterAndRank } = require("../nlp/propertyFilter");
 const { getAllListings } = require("../data/listings");
 const { pick } = require("../data/responses");
 const { getSmallTalkReply } = require("../services/llm");
-const { createViewingEvent } = require("../services/googleCalendar");
+const { createViewingEvent, deleteViewingEvent } = require("../services/googleCalendar");
 const {
   parseDateFromText,
   parseTimeFromText,
@@ -23,7 +23,7 @@ const {
   findNearestAvailableDate,
   formatDateLabel
 } = require("../utils/calendar");
-const { toDateKey, markBooked } = require("../utils/blockedDates");
+const { toDateKey, markBooked, unbook } = require("../utils/blockedDates");
 const { logInteraction } = require("../utils/logger");
 
 // Used ONLY for greeting/chit-chat/unmatched messages — see llm.js.
@@ -88,6 +88,9 @@ async function routeMessage(session, rawMessage, intent) {
     session.viewing = {};
     session.lastListings = [];
     return pick("restart");
+  }
+  if (intent === "cancel_booking") {
+    return handleCancelBooking(session);
   }
   if (intent === "goodbye") {
     return "Thank you for reaching out! Message us anytime you'd like to browse listings or schedule a viewing. 🏠";
@@ -308,12 +311,13 @@ async function handleAwaitingContact(session, rawMessage) {
 
   // Mark this slot as taken so it disappears for other buyers and
   // shows up on the agent's /admin calendar as booked.
-  markBooked(toDateKey(session.viewing.dateObj), session.viewing.time);
+  const dateKey = toDateKey(session.viewing.dateObj);
+  markBooked(dateKey, session.viewing.time);
 
   // Best-effort: push to Google Calendar if configured. Never blocks
   // the confirmation — if it's not set up or fails, the viewing is
   // still recorded in the chat + system log.
-  const calendarLink = await createViewingEvent({
+  const calendarResult = await createViewingEvent({
     propertyLabel: session.viewing.propertyLabel,
     location: session.viewing.propertyLocation,
     dateObj: session.viewing.dateObj,
@@ -327,10 +331,21 @@ async function handleAwaitingContact(session, rawMessage) {
     `Date: ${session.viewing.date}\n` +
     `Time: ${session.viewing.time}\n` +
     `Contact: ${session.viewing.contact}\n\n` +
-    (calendarLink
-      ? `Added to the agent's calendar: ${calendarLink}\n\n`
+    (calendarResult
+      ? `Added to the agent's calendar: ${calendarResult.htmlLink}\n\n`
       : "") +
-    `Our agent will reach out shortly to confirm. Thank you!`;
+    `Our agent will reach out shortly to confirm. Thank you! ` +
+    `(Say "cancel my booking" anytime if your plans change.)`;
+
+  // Remembered so a later "cancel my booking" in THIS conversation
+  // knows exactly what to undo.
+  session.lastBooking = {
+    propertyLabel: session.viewing.propertyLabel,
+    dateLabel: session.viewing.date,
+    dateKey,
+    time: session.viewing.time,
+    eventId: calendarResult?.eventId
+  };
 
   session.state = "idle";
   session.criteria = {};
@@ -338,6 +353,20 @@ async function handleAwaitingContact(session, rawMessage) {
   session.justBooked = true;
 
   return summary;
+}
+
+async function handleCancelBooking(session) {
+  if (!session.lastBooking) {
+    return "I don't see an active booking in this conversation to cancel. If you already have an appointment, please contact our agent directly to cancel it.";
+  }
+
+  const { propertyLabel, dateLabel, dateKey, time, eventId } = session.lastBooking;
+  unbook(dateKey, time);
+  if (eventId) await deleteViewingEvent(eventId);
+
+  session.lastBooking = null;
+
+  return `Your viewing for ${propertyLabel} on ${dateLabel} (${time}) has been cancelled. Let me know if you'd like to schedule another one.`;
 }
 
 module.exports = { handleMessage };
