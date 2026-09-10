@@ -23,6 +23,7 @@ const {
   findNearestAvailableDate,
   formatDateLabel
 } = require("../utils/calendar");
+const { toDateKey, markBooked } = require("../utils/blockedDates");
 const { logInteraction } = require("../utils/logger");
 
 // Used ONLY for greeting/chit-chat/unmatched messages — see llm.js.
@@ -304,6 +305,10 @@ function handleAwaitingTime(session, rawMessage) {
 
 async function handleAwaitingContact(session, rawMessage) {
   session.viewing.contact = rawMessage.trim();
+
+  // Mark this slot as taken so it disappears for other buyers and
+  // shows up on the agent's /admin calendar as booked.
+  markBooked(toDateKey(session.viewing.dateObj), session.viewing.time);
 
   // Best-effort: push to Google Calendar if configured. Never blocks
   // the confirmation — if it's not set up or fails, the viewing is

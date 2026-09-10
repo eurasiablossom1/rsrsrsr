@@ -18,7 +18,8 @@ const {
   isDateBlocked,
   toggleFullDay,
   toggleSlot,
-  getBlockedSlotsForDate
+  getBlockedSlotsForDate,
+  isBooked
 } = require("../utils/blockedDates");
 const { ALL_TIME_SLOTS } = require("../utils/calendar");
 
@@ -55,10 +56,18 @@ function buildCell(dateObj, key, isCurrentMonth, isPast) {
   const dayToggleUrl = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleDay=${dateKey}`;
 
   const slotButtons = ALL_TIME_SLOTS.map((t) => {
-    const isBlocked = fullyBlocked || blockedSlots.has(t);
-    const url = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleSlot=${dateKey}|${encodeURIComponent(t)}`;
+    const booked = isBooked(dateKey, t);
+    const agentBlocked = fullyBlocked || blockedSlots.has(t);
     const shortLabel = t === "Morning" ? "AM" : "PM";
-    return `<a href="${url}" class="slotbtn ${isBlocked ? "blocked" : "open"}">${shortLabel}</a>`;
+
+    if (booked) {
+      // Buyer already booked this slot — shown for visibility only,
+      // not click-toggleable (a real booking shouldn't be un-done here).
+      return `<span class="slotbtn booked" title="Booked by a buyer">${shortLabel}</span>`;
+    }
+
+    const url = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleSlot=${dateKey}|${encodeURIComponent(t)}`;
+    return `<a href="${url}" class="slotbtn ${agentBlocked ? "blocked" : "open"}">${shortLabel}</a>`;
   }).join("");
 
   return `
@@ -116,6 +125,7 @@ function renderPage(key, year, month) {
   .slotbtn { font-size:10px; font-weight:600; padding:2px 5px; border-radius:4px; text-decoration:none; }
   .slotbtn.open { background:#e9ebee; color:#050505; }
   .slotbtn.blocked { background:#e5484d; color:#fff; }
+  .slotbtn.booked { background:#1877f2; color:#fff; cursor:default; }
 </style></head>
 <body>
   <div class="wrap">
@@ -124,7 +134,7 @@ function renderPage(key, year, month) {
       <h1>${MONTH_NAMES[month]} ${year}</h1>
       <a href="${nextUrl}">&rarr;</a>
     </div>
-    <p class="legend">Click a date number to block/unblock the whole day. Click AM/PM to block just that slot. Red = blocked.</p>
+    <p class="legend">Click a date number to block/unblock the whole day. Click AM/PM to block just that slot. Red = you blocked it. Blue = a buyer already booked it.</p>
     <div class="grid">
       ${DAY_HEADERS.map((d) => `<div class="daylabel">${d}</div>`).join("")}
       ${cells.join("")}
