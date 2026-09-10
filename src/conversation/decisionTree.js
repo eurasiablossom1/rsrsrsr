@@ -15,11 +15,13 @@ const { pick } = require("../data/responses");
 const { getSmallTalkReply } = require("../services/llm");
 const { createViewingEvent } = require("../services/googleCalendar");
 const {
-  getAvailableDates,
-  formatDateOptions,
-  formatTimeOptions,
-  parseDateSelection,
-  parseTimeSelection
+  parseDateFromText,
+  parseTimeFromText,
+  buildDateObject,
+  isDateBookable,
+  getAvailableTimeSlots,
+  findNearestAvailableDate,
+  formatDateLabel
 } = require("../utils/calendar");
 const { logInteraction } = require("../utils/logger");
 
@@ -194,12 +196,9 @@ function handleShowingResults(session, rawMessage, intent) {
       session.viewing.propertyLocation = chosen.location;
       session.state = "awaiting_date";
 
-      const availableDates = getAvailableDates(6);
-      session.viewing.availableDates = availableDates;
-
       return (
         `${pick("confirmViewing")} ${session.viewing.propertyLabel} (${chosen.location}).\n\n` +
-        `Pick a date for your viewing:\n${formatDateOptions(availableDates)}`
+        `What date would you like to visit, and morning or afternoon? (e.g. "September 20 morning")`
       );
     }
   }
@@ -211,25 +210,94 @@ function handleShowingResults(session, rawMessage, intent) {
   return "I didn't quite get that. Reply with the listing number to schedule a viewing, or say \"search again\" to look for something else.";
 }
 
-function handleAwaitingDate(session, rawMessage) {
-  const chosen = parseDateSelection(rawMessage, session.viewing.availableDates || []);
-  if (!chosen) {
-    return `Please pick a valid option:\n${formatDateOptions(session.viewing.availableDates || [])}`;
+const AFFIRMATIVE = /^(yes|yep|yup|sure|ok|okay|oo|sige|opo)\b/i;
+
+function suggestAlternative(session, fromDate, reason) {
+  const nearest = findNearestAvailableDate(fromDate);
+  session.state = "awaiting_date";
+
+  if (!nearest) {
+    session.viewing.suggestedDate = undefined;
+    session.viewing.suggestedLabel = undefined;
+    return `Sorry, ${reason} I couldn't find another open date nearby either. Could you try a different date?`;
   }
 
-  session.viewing.date = chosen.label;
-  session.viewing.dateObj = chosen.date;
+  session.viewing.suggestedDate = nearest.date;
+  session.viewing.suggestedLabel = nearest.label;
+  return `Sorry, ${reason} The closest available date is ${nearest.label} — should I book that, or give me another date?`;
+}
+
+function handleAwaitingDate(session, rawMessage) {
+  const lower = rawMessage.trim().toLowerCase();
+
+  let dateObj;
+  let label;
+
+  if (AFFIRMATIVE.test(lower) && session.viewing.suggestedDate) {
+    dateObj = session.viewing.suggestedDate;
+    label = session.viewing.suggestedLabel;
+  } else {
+    const parsed = parseDateFromText(rawMessage);
+    if (!parsed) {
+      return `Sorry, I couldn't catch the date. Could you give it like "September 20" or "9/20"?`;
+    }
+
+    const candidate = buildDateObject(parsed);
+    if (!isDateBookable(candidate)) {
+      const reason = candidate.getDay() === 0
+        ? `we're closed Sundays, so ${formatDateLabel(candidate)} won't work.`
+        : `${formatDateLabel(candidate)} isn't available.`;
+      return suggestAlternative(session, candidate, reason);
+    }
+
+    dateObj = candidate;
+    label = formatDateLabel(candidate);
+  }
+
+  session.viewing.suggestedDate = undefined;
+  session.viewing.suggestedLabel = undefined;
+  session.viewing.date = label;
+  session.viewing.dateObj = dateObj;
+
+  const openSlots = getAvailableTimeSlots(dateObj);
+  const timeGuess = parseTimeFromText(rawMessage);
+
+  if (openSlots.length === 0) {
+    return suggestAlternative(session, new Date(dateObj.getTime() + 86400000), `${label} is fully booked.`);
+  }
+
+  if (timeGuess && openSlots.includes(timeGuess)) {
+    session.viewing.time = timeGuess;
+    session.state = "awaiting_contact";
+    return `Got it — ${label}, ${timeGuess}. Could you share a contact number so our agent can confirm the appointment?`;
+  }
+
+  if (timeGuess && !openSlots.includes(timeGuess)) {
+    session.state = "awaiting_time";
+    return `${timeGuess} is already taken on ${label}. Would ${openSlots.join(" or ")} work instead?`;
+  }
+
   session.state = "awaiting_time";
-  return `Got it — ${chosen.label}. What time works for you?\n${formatTimeOptions(chosen.date)}`;
+  return `Got it — ${label}. Morning or afternoon?`;
 }
 
 function handleAwaitingTime(session, rawMessage) {
-  const chosen = parseTimeSelection(rawMessage, session.viewing.dateObj);
-  if (!chosen) {
-    return `Please pick a valid time slot:\n${formatTimeOptions(session.viewing.dateObj)}`;
+  const openSlots = getAvailableTimeSlots(session.viewing.dateObj);
+
+  if (openSlots.length === 0) {
+    return suggestAlternative(session, new Date(session.viewing.dateObj.getTime() + 86400000), `${session.viewing.date} just got fully booked.`);
   }
 
-  session.viewing.time = chosen;
+  const timeGuess = parseTimeFromText(rawMessage);
+  if (!timeGuess) {
+    return `Please let me know — morning or afternoon?`;
+  }
+
+  if (!openSlots.includes(timeGuess)) {
+    return `${timeGuess} isn't available on ${session.viewing.date}. Would ${openSlots.join(" or ")} work instead?`;
+  }
+
+  session.viewing.time = timeGuess;
   session.state = "awaiting_contact";
   return "Perfect. Lastly, could you share a contact number so our agent can confirm the appointment?";
 }
