@@ -1,14 +1,14 @@
 /**
- * Agent Admin Page — block/unblock viewing dates & time slots
+ * Agent Admin Page — real calendar grid, block/unblock dates & slots
  * -------------------------------------------------
- * GET /admin?key=YOUR_KEY  -> shows the next 21 days, click to
- * toggle a full-day block or an individual time slot block.
+ * GET /admin?key=YOUR_KEY              -> current month
+ * GET /admin?key=YOUR_KEY&month=2026-10 -> specific month
  *
- * Protected by ADMIN_KEY env var. Set it in Render > Environment,
- * e.g. ADMIN_KEY=agent2026
+ * Click a date number to block/unblock the whole day. Click AM/PM
+ * inside a cell to block/unblock just that half of the day.
  *
- * In-memory (see blockedDates.js) — resets on redeploy. Bookmark
- * this URL; the agent doesn't need a Google account or any setup.
+ * Protected by ADMIN_KEY env var. In-memory (see blockedDates.js) —
+ * resets on redeploy.
  */
 
 const express = require("express");
@@ -22,53 +22,114 @@ const {
 } = require("../utils/blockedDates");
 const { ALL_TIME_SLOTS } = require("../utils/calendar");
 
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const DAY_HEADERS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function renderPage(key, days) {
-  const rows = days
-    .map((d) => {
-      const key2 = toDateKey(d);
-      const fullyBlocked = isDateBlocked(d);
-      const blockedSlots = getBlockedSlotsForDate(key2);
+function parseMonthParam(monthStr) {
+  if (monthStr && /^\d{4}-\d{2}$/.test(monthStr)) {
+    const [y, m] = monthStr.split("-").map(Number);
+    return { year: y, month: m - 1 };
+  }
+  const now = new Date();
+  return { year: now.getFullYear(), month: now.getMonth() };
+}
 
-      const dayLabel = `${DAY_NAMES[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
-      const dayToggleUrl = `/admin?key=${encodeURIComponent(key)}&toggleDay=${key2}`;
+function monthParam(year, month) {
+  return `${year}-${String(month + 1).padStart(2, "0")}`;
+}
 
-      const slotButtons = ALL_TIME_SLOTS.map((t) => {
-        const isBlocked = fullyBlocked || blockedSlots.has(t);
-        const url = `/admin?key=${encodeURIComponent(key)}&toggleSlot=${key2}|${encodeURIComponent(t)}`;
-        const style = isBlocked
-          ? "background:#e5484d;color:#fff;"
-          : "background:#e9ebee;color:#050505;";
-        return `<a href="${url}" style="display:inline-block;padding:6px 10px;margin:2px;border-radius:6px;text-decoration:none;font-size:13px;${style}">${t}</a>`;
-      }).join("");
+function buildCell(dateObj, key, isCurrentMonth, isPast) {
+  if (!isCurrentMonth) {
+    return `<div class="cell empty"></div>`;
+  }
 
-      return `
-        <tr style="border-bottom:1px solid #e4e6eb;">
-          <td style="padding:10px 8px; white-space:nowrap;">
-            <a href="${dayToggleUrl}" style="display:inline-block;padding:6px 12px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;${fullyBlocked ? "background:#e5484d;color:#fff;" : "background:#31a24c;color:#fff;"}">
-              ${dayLabel}
-            </a>
-          </td>
-          <td style="padding:10px 8px;">${slotButtons}</td>
-        </tr>`;
-    })
-    .join("");
+  const dateKey = toDateKey(dateObj);
+  const fullyBlocked = isDateBlocked(dateObj);
+  const blockedSlots = getBlockedSlotsForDate(dateKey);
+  const dayNum = dateObj.getDate();
+
+  if (isPast) {
+    return `<div class="cell past"><div class="daynum">${dayNum}</div></div>`;
+  }
+
+  const dayToggleUrl = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleDay=${dateKey}`;
+
+  const slotButtons = ALL_TIME_SLOTS.map((t) => {
+    const isBlocked = fullyBlocked || blockedSlots.has(t);
+    const url = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(dateObj.getFullYear(), dateObj.getMonth())}&toggleSlot=${dateKey}|${encodeURIComponent(t)}`;
+    const shortLabel = t === "Morning" ? "AM" : "PM";
+    return `<a href="${url}" class="slotbtn ${isBlocked ? "blocked" : "open"}">${shortLabel}</a>`;
+  }).join("");
+
+  return `
+    <div class="cell ${fullyBlocked ? "fullyblocked" : ""}">
+      <a href="${dayToggleUrl}" class="daynum-link">${dayNum}</a>
+      <div class="slots">${slotButtons}</div>
+    </div>`;
+}
+
+function renderPage(key, year, month) {
+  const firstOfMonth = new Date(year, month, 1);
+  const startOffset = firstOfMonth.getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const cells = [];
+  for (let i = 0; i < startOffset; i++) cells.push(buildCell(null, key, false, false));
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateObj = new Date(year, month, d);
+    const isPast = dateObj < today;
+    cells.push(buildCell(dateObj, key, true, isPast));
+  }
+  while (cells.length % 7 !== 0) cells.push(buildCell(null, key, false, false));
+
+  const prevMonth = month === 0 ? { y: year - 1, m: 11 } : { y: year, m: month - 1 };
+  const nextMonth = month === 11 ? { y: year + 1, m: 0 } : { y: year, m: month + 1 };
+  const prevUrl = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(prevMonth.y, prevMonth.m)}`;
+  const nextUrl = `/admin?key=${encodeURIComponent(key)}&month=${monthParam(nextMonth.y, nextMonth.m)}`;
 
   return `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Viewing Availability — Admin</title>
 <style>
-  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#f0f2f5; margin:0; padding:20px; }
-  h1 { font-size:18px; }
-  p.legend { font-size:13px; color:#65676b; }
-  table { border-collapse: collapse; width:100%; max-width:700px; background:#fff; border-radius:8px; overflow:hidden; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#f0f2f5; margin:0; padding:16px; }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .header h1 { font-size:17px; margin:0; }
+  .header a { text-decoration:none; color:#1877f2; font-size:20px; padding:4px 12px; border-radius:6px; }
+  .header a:hover { background:#e7f0fd; }
+  p.legend { font-size:12.5px; color:#65676b; margin:0 0 12px; }
+  .grid { display:grid; grid-template-columns: repeat(7, 1fr); gap:4px; background:#fff; padding:8px; border-radius:10px; }
+  .daylabel { text-align:center; font-size:11px; font-weight:600; color:#65676b; padding:4px 0; }
+  .cell { border-radius:8px; padding:4px; min-height:56px; display:flex; flex-direction:column; align-items:center; background:#f7f8fa; }
+  .cell.empty { background:transparent; }
+  .cell.past { background:#f0f0f0; opacity:0.4; }
+  .cell.fullyblocked { background:#fde2e2; }
+  .daynum-link { font-size:13px; font-weight:600; color:#050505; text-decoration:none; padding:2px 6px; border-radius:5px; }
+  .daynum-link:hover { background:#e4e6eb; }
+  .cell.fullyblocked .daynum-link { color:#e5484d; }
+  .cell.past .daynum { font-size:13px; color:#8a8d91; padding:2px 6px; }
+  .slots { display:flex; gap:2px; margin-top:3px; }
+  .slotbtn { font-size:10px; font-weight:600; padding:2px 5px; border-radius:4px; text-decoration:none; }
+  .slotbtn.open { background:#e9ebee; color:#050505; }
+  .slotbtn.blocked { background:#e5484d; color:#fff; }
 </style></head>
 <body>
-  <h1>Viewing Availability</h1>
-  <p class="legend">Click a date to block/unblock the whole day (red = blocked). Click a time slot to block/unblock just that slot.</p>
-  <table>${rows}</table>
+  <div class="wrap">
+    <div class="header">
+      <a href="${prevUrl}">&larr;</a>
+      <h1>${MONTH_NAMES[month]} ${year}</h1>
+      <a href="${nextUrl}">&rarr;</a>
+    </div>
+    <p class="legend">Click a date number to block/unblock the whole day. Click AM/PM to block just that slot. Red = blocked.</p>
+    <div class="grid">
+      ${DAY_HEADERS.map((d) => `<div class="daylabel">${d}</div>`).join("")}
+      ${cells.join("")}
+    </div>
+  </div>
 </body></html>`;
 }
 
@@ -78,27 +139,20 @@ router.get("/", (req, res) => {
     return res.status(403).send("Forbidden — missing or wrong ?key=");
   }
 
+  const { year, month } = parseMonthParam(req.query.month);
+
   if (req.query.toggleDay) {
     toggleFullDay(req.query.toggleDay);
-    return res.redirect(`/admin?key=${encodeURIComponent(key)}`);
+    return res.redirect(`/admin?key=${encodeURIComponent(key)}&month=${monthParam(year, month)}`);
   }
   if (req.query.toggleSlot) {
     const [dateKey, timeLabel] = req.query.toggleSlot.split("|");
     toggleSlot(dateKey, decodeURIComponent(timeLabel));
-    return res.redirect(`/admin?key=${encodeURIComponent(key)}`);
-  }
-
-  const days = [];
-  const cursor = new Date();
-  cursor.setHours(0, 0, 0, 0);
-  cursor.setDate(cursor.getDate() + 1);
-  for (let i = 0; i < 21; i++) {
-    days.push(new Date(cursor));
-    cursor.setDate(cursor.getDate() + 1);
+    return res.redirect(`/admin?key=${encodeURIComponent(key)}&month=${monthParam(year, month)}`);
   }
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.send(renderPage(key, days));
+  res.send(renderPage(key, year, month));
 });
 
 module.exports = router;

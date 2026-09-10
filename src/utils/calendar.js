@@ -2,10 +2,10 @@
  * Simple Viewing Calendar
  * -------------------------------------------------
  * No external calendar service — generates the next available
- * viewing dates (skips Sundays + agent-blocked dates) and a fixed
- * set of time slots (minus any the agent blocked for that date), and
- * lets the buyer pick by number instead of free-typing a date/time.
- * Keeps everything deterministic, matching the rule-based design.
+ * viewing dates (skips Sundays + agent-blocked dates) and offers
+ * Morning/Afternoon as the two viewing slots (minus whichever the
+ * agent blocked for that date). Buyer picks by number, not free
+ * text. Fully deterministic, matching the rule-based design.
  */
 
 const { isDateBlocked, isSlotBlocked } = require("./blockedDates");
@@ -16,7 +16,7 @@ const MONTH_NAMES = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-const ALL_TIME_SLOTS = ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM"];
+const ALL_TIME_SLOTS = ["Morning", "Afternoon"];
 
 /** Returns the next `count` available dates (skips Sundays + agent-blocked full days), starting tomorrow. */
 function getAvailableDates(count = 6) {
@@ -25,7 +25,6 @@ function getAvailableDates(count = 6) {
   cursor.setHours(0, 0, 0, 0);
   cursor.setDate(cursor.getDate() + 1); // start tomorrow
 
-  // safety cap so a long blocked stretch can't loop forever
   let daysChecked = 0;
   while (dates.length < count && daysChecked < 90) {
     daysChecked++;
@@ -44,18 +43,17 @@ function formatDateOptions(dates) {
   return dates.map((d, i) => `${i + 1}. ${d.label}`).join("\n");
 }
 
-/** Time slots still open for a given date (agent-blocked ones removed). */
+/** Morning/Afternoon slots still open for a given date. */
 function getAvailableTimeSlots(dateObj) {
   return ALL_TIME_SLOTS.filter((t) => !isSlotBlocked(dateObj, t));
 }
 
 function formatTimeOptions(dateObj) {
   const slots = getAvailableTimeSlots(dateObj);
-  if (slots.length === 0) return "(No time slots left that day — please pick a different date.)";
+  if (slots.length === 0) return "(No slots left that day — please pick a different date.)";
   return slots.map((t, i) => `${i + 1}. ${t}`).join("\n");
 }
 
-/** Parses a numbered selection ("2") against a list built by getAvailableDates(). */
 function parseDateSelection(input, dates) {
   const match = input.trim().match(/\b([1-9])\b/);
   if (!match) return null;
@@ -63,7 +61,6 @@ function parseDateSelection(input, dates) {
   return dates[idx] || null;
 }
 
-/** Parses a numbered selection against that date's currently-open slots. */
 function parseTimeSelection(input, dateObj) {
   const match = input.trim().match(/\b([1-9])\b/);
   if (!match) return null;

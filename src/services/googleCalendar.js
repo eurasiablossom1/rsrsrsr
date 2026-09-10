@@ -49,15 +49,11 @@ function getAuth() {
   }
 }
 
-/** Combines a Date (midnight, from calendar.js) with a "3:00 PM"-style label. */
+/** Combines a Date (midnight, from calendar.js) with a "Morning"/"Afternoon" label. */
 function combineDateAndTime(dateObj, timeLabel) {
-  const [time, meridiem] = timeLabel.split(" ");
-  let [hours, minutes] = time.split(":").map(Number);
-  if (meridiem === "PM" && hours !== 12) hours += 12;
-  if (meridiem === "AM" && hours === 12) hours = 0;
-
+  const hours = timeLabel === "Afternoon" ? 14 : 9; // 2:00 PM / 9:00 AM anchor times
   const combined = new Date(dateObj);
-  combined.setHours(hours, minutes, 0, 0);
+  combined.setHours(hours, 0, 0, 0);
   return combined;
 }
 
