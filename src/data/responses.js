@@ -58,9 +58,9 @@ const RESPONSES = {
   ],
 
   fallback: [
-    "Hmm, I didn't quite get that. You can ask about available properties (e.g. \"condo sa Bacoor, budget 3M\") or say \"schedule a viewing.\"",
-    "Sorry, di ko masyadong nakuha yun 🙂 Try telling me the property type, budget, and location you're looking for.",
-    "I'm not sure I understood. Try something like \"house and lot sa Imus, 3.5M budget.\""
+    "Hmm, I didn't quite catch that. Let me know if you'd like to look for a property, schedule a viewing, or if there's anything else I can help with.",
+    "Sorry, di ko masyadong nakuha yun. Sabihin mo lang kung may gusto kang hanapin o kung may iba pa akong maitutulong.",
+    "Not sure I got that — happy to help you search for a property, book a viewing, or answer anything else you need."
   ]
 };
 
