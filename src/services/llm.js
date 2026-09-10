@@ -45,7 +45,11 @@ function stripEmoji(text) {
   return text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu, "").trim();
 }
 
-async function callGroq(userMessage) {
+async function callGroq(userMessage, contextHint) {
+  const systemContent = contextHint
+    ? `${SYSTEM_PROMPT}\n\nContext: ${contextHint}`
+    : SYSTEM_PROMPT;
+
   const res = await axios.post(
     GROQ_URL,
     {
@@ -54,7 +58,7 @@ async function callGroq(userMessage) {
       temperature: 1.0,
       top_p: 0.95,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemContent },
         { role: "user", content: userMessage }
       ]
     },
@@ -76,12 +80,12 @@ async function callGroq(userMessage) {
  * unavailable/disabled/fails (after one retry) — callers must have a
  * static fallback.
  */
-async function getSmallTalkReply(userMessage) {
+async function getSmallTalkReply(userMessage, contextHint) {
   if (!GROQ_API_KEY) return null;
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      const reply = await callGroq(userMessage);
+      const reply = await callGroq(userMessage, contextHint);
       if (reply) return reply;
     } catch (err) {
       const isLastAttempt = attempt === 2;

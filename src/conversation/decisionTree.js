@@ -27,8 +27,8 @@ const { logInteraction } = require("../utils/logger");
 // Falls back to a static varied phrasing if the LLM is unavailable,
 // disabled, or fails, so the bot always works even with zero LLM
 // dependency.
-async function naturalOrStatic(rawMessage, fallbackKey) {
-  const llmReply = await getSmallTalkReply(rawMessage);
+async function naturalOrStatic(rawMessage, fallbackKey, contextHint) {
+  const llmReply = await getSmallTalkReply(rawMessage, contextHint);
   return llmReply || pick(fallbackKey);
 }
 
@@ -110,6 +110,12 @@ async function routeMessage(session, rawMessage, intent) {
 }
 
 async function handleIdle(session, rawMessage, intent) {
+  // If they just finished booking a viewing, give the LLM a heads-up
+  // so it doesn't reset to "what are you looking for" on casual
+  // replies like "ok" or "thanks" — only consumed once.
+  const justBooked = session.justBooked;
+  if (justBooked) session.justBooked = false;
+
   if (intent === "greeting") {
     session.state = "collecting_criteria";
     return naturalOrStatic(rawMessage, "greeting");
@@ -125,7 +131,11 @@ async function handleIdle(session, rawMessage, intent) {
     return "I'd be happy to help you schedule a viewing! First, let's find the right property — what type, budget, and location are you considering?";
   }
 
-  return naturalOrStatic(rawMessage, "fallback");
+  const contextHint = justBooked
+    ? "The buyer just finished booking a property viewing a moment ago. Respond naturally to whatever they just said — don't repeat an offer to search for properties unless they're clearly asking for that."
+    : undefined;
+
+  return naturalOrStatic(rawMessage, "fallback", contextHint);
 }
 
 async function handleCollectingCriteria(session, rawMessage, intent) {
@@ -244,6 +254,7 @@ async function handleAwaitingContact(session, rawMessage) {
   session.state = "idle";
   session.criteria = {};
   session.viewing = {};
+  session.justBooked = true;
 
   return summary;
 }
