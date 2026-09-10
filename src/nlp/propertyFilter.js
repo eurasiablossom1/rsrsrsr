@@ -14,6 +14,10 @@
 
 const { isFuzzyMatch } = require("../utils/levenshtein");
 
+function stripDiacritics(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 const WEIGHTS = {
   type: 0.35,
   location: 0.30,
@@ -73,10 +77,11 @@ function extractCriteria(message, knownLocations) {
   else if (/house|bahay/.test(lower)) criteria.type = "house_and_lot";
   else if (/vacant lot|lot only|raw land|\blupa\b/.test(lower)) criteria.type = "lot_only";
 
-  const tokens = lower.replace(/[^\w\s]/g, " ").split(/\s+/).filter(Boolean);
+  const lowerNorm = stripDiacritics(lower);
+  const tokens = lowerNorm.replace(/[^\w\s]/g, " ").split(/\s+/).filter(Boolean);
   for (const loc of knownLocations) {
-    const locLower = loc.toLowerCase();
-    if (lower.includes(locLower)) {
+    const locLower = stripDiacritics(loc.toLowerCase());
+    if (lowerNorm.includes(locLower)) {
       criteria.location = loc;
       break;
     }
@@ -107,7 +112,9 @@ function scoreListing(listing, criteria) {
   }
   if (criteria.location) {
     weightUsed += WEIGHTS.location;
-    if (listing.location.toLowerCase().includes(criteria.location.toLowerCase().split(",")[0])) {
+    const listingLoc = stripDiacritics(listing.location.toLowerCase());
+    const criteriaLoc = stripDiacritics(criteria.location.toLowerCase().split(",")[0]);
+    if (listingLoc.includes(criteriaLoc)) {
       score += WEIGHTS.location;
     }
   }
