@@ -138,13 +138,21 @@ async function handleIdle(session, rawMessage, intent) {
   return naturalOrStatic(rawMessage, "fallback", contextHint);
 }
 
+const SEARCH_INTENTS = ["property_inquiry", "schedule_viewing", "location", "budget", "property_type"];
+
 async function handleCollectingCriteria(session, rawMessage, intent) {
   const newCriteria = extractCriteria(rawMessage, getKnownLocations());
   session.criteria = { ...session.criteria, ...newCriteria };
 
   const { type, location, budget } = session.criteria;
 
-  if (!type && !location && !budget) return naturalOrStatic(rawMessage, "fallback");
+  if (!type && !location && !budget) {
+    // They clearly signaled they want to search (e.g. "looking for one")
+    // but gave no specifics — ask directly instead of letting the LLM
+    // improvise a misleading "pulling up options" reply.
+    if (SEARCH_INTENTS.includes(intent)) return pick("askType");
+    return naturalOrStatic(rawMessage, "fallback");
+  }
   if (!type) return pick("askType");
   if (!location) return pick("askLocation");
   if (!budget) return pick("askBudget");
