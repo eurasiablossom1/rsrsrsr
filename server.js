@@ -4,6 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const webhookRouter = require("./src/routes/webhook");
 const chatApiRouter = require("./src/routes/chatApi");
+const logsViewRouter = require("./src/routes/logsView");
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,9 +17,13 @@ app.get("/", (req, res) => {
 app.use("/webhook", webhookRouter);
 
 // Web test chat — bypasses Facebook Messenger entirely, same bot logic.
-// Visit https://yourapp.onrender.com/chat in any browser.
+// Visit https://yourapp.onrender.com/chat.html in any browser.
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/chat", chatApiRouter);
+
+// Readable transcript of logged conversations, for thesis appendix.
+// Visit https://yourapp.onrender.com/logs?key=YOUR_LOG_ACCESS_KEY
+app.use("/logs", logsViewRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
