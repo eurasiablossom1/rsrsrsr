@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const webhookRouter = require("./src/routes/webhook");
 const chatApiRouter = require("./src/routes/chatApi");
 const logsViewRouter = require("./src/routes/logsView");
+const adminRouter = require("./src/routes/admin");
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +25,10 @@ app.use("/api/chat", chatApiRouter);
 // Readable transcript of logged conversations, for thesis appendix.
 // Visit https://yourapp.onrender.com/logs?key=YOUR_LOG_ACCESS_KEY
 app.use("/logs", logsViewRouter);
+
+// Agent page to block/unblock viewing dates & time slots.
+// Visit https://yourapp.onrender.com/admin?key=YOUR_ADMIN_KEY
+app.use("/admin", adminRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

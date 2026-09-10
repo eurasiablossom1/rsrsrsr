@@ -218,15 +218,15 @@ function handleAwaitingDate(session, rawMessage) {
   }
 
   session.viewing.date = chosen.label;
-  session.viewing.dateObj = chosen.date; // raw Date, needed for Google Calendar
+  session.viewing.dateObj = chosen.date;
   session.state = "awaiting_time";
-  return `Got it — ${chosen.label}. What time works for you?\n${formatTimeOptions()}`;
+  return `Got it — ${chosen.label}. What time works for you?\n${formatTimeOptions(chosen.date)}`;
 }
 
 function handleAwaitingTime(session, rawMessage) {
-  const chosen = parseTimeSelection(rawMessage);
+  const chosen = parseTimeSelection(rawMessage, session.viewing.dateObj);
   if (!chosen) {
-    return `Please pick a valid time slot:\n${formatTimeOptions()}`;
+    return `Please pick a valid time slot:\n${formatTimeOptions(session.viewing.dateObj)}`;
   }
 
   session.viewing.time = chosen;
