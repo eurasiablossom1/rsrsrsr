@@ -293,17 +293,23 @@ function handleAwaitingTime(session, rawMessage) {
   }
 
   const timeGuess = parseTimeFromText(rawMessage);
-  if (!timeGuess) {
-    return `Please let me know — morning or afternoon?`;
+  if (timeGuess) {
+    if (!openSlots.includes(timeGuess)) {
+      return `${timeGuess} isn't available on ${session.viewing.date}. Would ${openSlots.join(" or ")} work instead?`;
+    }
+    session.viewing.time = timeGuess;
+    session.state = "awaiting_contact";
+    return "Perfect. Lastly, could you share a contact number so our agent can confirm the appointment?";
   }
 
-  if (!openSlots.includes(timeGuess)) {
-    return `${timeGuess} isn't available on ${session.viewing.date}. Would ${openSlots.join(" or ")} work instead?`;
+  // Not a time — they may be giving a different date instead (e.g.
+  // after being told their preferred slot is taken). Re-run date
+  // handling so this isn't a dead end.
+  if (parseDateFromText(rawMessage)) {
+    return handleAwaitingDate(session, rawMessage);
   }
 
-  session.viewing.time = timeGuess;
-  session.state = "awaiting_contact";
-  return "Perfect. Lastly, could you share a contact number so our agent can confirm the appointment?";
+  return `Please let me know — morning or afternoon? Or give me a different date if you'd like.`;
 }
 
 async function handleAwaitingContact(session, rawMessage) {

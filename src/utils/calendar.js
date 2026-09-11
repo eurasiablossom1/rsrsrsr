@@ -10,6 +10,7 @@
  */
 
 const { isDateBlocked, isSlotBlocked } = require("./blockedDates");
+const { isFuzzyMatch } = require("./levenshtein");
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTH_NAMES = [
@@ -68,11 +69,19 @@ function parseDateFromText(text) {
   return null;
 }
 
-/** Extracts "Morning" or "Afternoon" from free text, or null. */
+/** Extracts "Morning" or "Afternoon" from free text (typo-tolerant), or null. */
 function parseTimeFromText(text) {
   const lower = text.toLowerCase();
-  if (/\bmorning\b|\bumaga\b|\bam\b|\ba\.m\.?\b/.test(lower)) return "Morning";
-  if (/\bafternoon\b|\bhapon\b|\bpm\b|\bp\.m\.?\b/.test(lower)) return "Afternoon";
+
+  // am/pm are too short to fuzzy-match safely, so check these literally first.
+  if (/\bam\b|\ba\.m\.?\b/.test(lower)) return "Morning";
+  if (/\bpm\b|\bp\.m\.?\b/.test(lower)) return "Afternoon";
+
+  const tokens = lower.replace(/[^\w\s]/g, " ").split(/\s+/).filter(Boolean);
+  for (const t of tokens) {
+    if (isFuzzyMatch(t, "morning") || isFuzzyMatch(t, "umaga")) return "Morning";
+    if (isFuzzyMatch(t, "afternoon") || isFuzzyMatch(t, "hapon")) return "Afternoon";
+  }
   return null;
 }
 
