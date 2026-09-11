@@ -41,7 +41,10 @@ router.get("/", (req, res) => {
   const entries = readLog();
 
   if (req.query.raw) {
-    res.setHeader("Content-Type", "application/json");
+    // Real .jsonl file download — one JSON object per line, as most
+    // JSONL tools/viewers expect.
+    res.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+    res.setHeader("Content-Disposition", "attachment; filename=\"chat-log.jsonl\"");
     return res.send(entries.map((e) => JSON.stringify(e)).join("\n"));
   }
 
