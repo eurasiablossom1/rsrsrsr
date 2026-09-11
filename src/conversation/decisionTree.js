@@ -312,7 +312,16 @@ function handleAwaitingTime(session, rawMessage) {
   return `Please let me know — morning or afternoon? Or give me a different date if you'd like.`;
 }
 
+function looksLikeContact(text) {
+  const digits = text.replace(/\D/g, "");
+  return digits.length >= 7; // loose phone-number heuristic
+}
+
 async function handleAwaitingContact(session, rawMessage) {
+  if (!looksLikeContact(rawMessage)) {
+    return `That doesn't look like a valid contact number — could you share your mobile number (e.g. 09XXXXXXXXX)?`;
+  }
+
   session.viewing.contact = rawMessage.trim();
 
   // Mark this slot as taken so it disappears for other buyers and

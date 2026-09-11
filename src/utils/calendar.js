@@ -69,9 +69,21 @@ function parseDateFromText(text) {
   return null;
 }
 
+// Rule-based matching has no real language understanding — it can't
+// tell "morning works" from "not available in the morning" by itself.
+// This is a deliberate, narrow patch for that specific failure mode:
+// if a negation word appears anywhere in the message, we don't trust
+// any time-word match from it at all, and let the caller fall back to
+// asking again or parsing a date instead. It's a heuristic, not true
+// negation handling — an unrelated "no" elsewhere in a longer message
+// could still suppress a valid match, but for short scheduling replies
+// this avoids the much worse failure of silently booking the wrong slot.
+const NEGATION_PATTERN = /\b(not|walang|wala|hindi|huwag|'wag|dont|don't|no)\b/i;
+
 /** Extracts "Morning" or "Afternoon" from free text (typo-tolerant), or null. */
 function parseTimeFromText(text) {
   const lower = text.toLowerCase();
+  if (NEGATION_PATTERN.test(lower)) return null;
 
   // am/pm are too short to fuzzy-match safely, so check these literally first.
   if (/\bam\b|\ba\.m\.?\b/.test(lower)) return "Morning";
